@@ -21,14 +21,8 @@ export default Component.extend({
   classNames: ['swiper-container'],
   swiper: false,
 
-  swiperOptions: computed('pagination', 'loop', 'vertical', 'onlyExternal', 'effect', ...swiperParameters, function() {
+  swiperOptions: computed('pagination', 'loop', 'vertical', 'onlyExternal', 'effect', function() {
     let options = {};
-
-    swiperParameters.forEach((parameter) => {
-      if (this.get(parameter)) {
-        options[parameter] = parameter;
-      }
-    });
 
     if (this.get('pagination')) {
       options.pagination = typeof this.get('pagination') === 'boolean' ?
@@ -83,10 +77,6 @@ export default Component.extend({
       options.slidesPerView = this.get('slidesPerView');
     }
 
-    if (this.get('slidesPerColumn')) {
-      options.slidesPerColumn = this.get('slidesPerColumn');
-    }
-
     if (this.get('spaceBetween')) {
       options.spaceBetween = this.get('spaceBetween');
     }
@@ -109,10 +99,6 @@ export default Component.extend({
 
     if (this.get('grabCursor')) {
       options.grabCursor = true;
-    }
-
-    if (this.get('nested')) {
-      options.nested = true;
     }
 
     if (this.get('breakpoints')) {
@@ -141,6 +127,20 @@ export default Component.extend({
 
     if (this.get('watchSlidesVisibility')) {
       options.watchSlidesVisibility = true;
+    }
+
+    if (this.get('lazyLoad')) {
+      let loadPrevNextAmount = this.get('slidesPerView') || 2;
+      options.preloadImages = false;
+      // options.lazy = true;
+      options.lazy = {
+        loadPrevNext: true,
+        loadPrevNextAmount: loadPrevNextAmount,
+        loadOnTransitionStart: true,
+        elementClass: 'swiper-lazy',
+        loadingClass: 'swiper-lazy-loading',
+        preloaderClass: 'swiper-lazy-preloader'
+      };
     }
 
     // basic support for 'effect' API
@@ -204,9 +204,6 @@ export default Component.extend({
     run.scheduleOnce('afterRender', this, function() {
       this.set('swiper', new Swiper(this.element, this.get('swiperOptions')));
       this.set('registerAs', this);
-      if (this.get('afterSwiperInit')) {
-        this.sendAction('afterSwiperInit', this);
-      }
     });
   }),
 
