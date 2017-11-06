@@ -132,15 +132,10 @@ export default Component.extend({
     if (this.get('lazyLoad')) {
       let loadPrevNextAmount = this.get('slidesPerView') || 2;
       options.preloadImages = false;
-      // options.lazy = true;
-      options.lazy = {
-        loadPrevNext: true,
-        loadPrevNextAmount: loadPrevNextAmount,
-        loadOnTransitionStart: true,
-        elementClass: 'swiper-lazy',
-        loadingClass: 'swiper-lazy-loading',
-        preloaderClass: 'swiper-lazy-preloader'
-      };
+      options.lazyLoading = true;
+      options.lazyLoadingInPrevNext = true;
+      options.lazyLoadingInPrevNextAmount = 1;
+      options.lazyLoadingOnTransitionStart = true;
     }
 
     // basic support for 'effect' API
