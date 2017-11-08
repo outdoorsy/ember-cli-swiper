@@ -143,6 +143,15 @@ export default Component.extend({
       options.watchSlidesVisibility = true;
     }
 
+    if (this.get('lazyLoad')) {
+      let loadPrevNextAmount = this.get('slidesPerView') || 1;
+      options.lazyLoading = true;
+      options.preloadImages = false;
+      options.lazyLoadingInPrevNext = true;
+      options.lazyLoadingOnTransitionStart = true;
+      options.lazyLoadingInPrevNextAmount = loadPrevNextAmount;
+    }
+
     // basic support for 'effect' API
     let effect = this.get('effect');
     if (effect && effect !== 'slide') {
