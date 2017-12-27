@@ -9,8 +9,9 @@ module.exports = {
   name: 'ember-cli-swiper',
 
   treeForVendor: function(defaultTree) {
-    let swiperPath = path.join(path.dirname(require.resolve('swiper')), '..');
-    let browserVendorLib = new Funnel(swiperPath, {
+    var trees = [];
+    var swiperPath = path.join(path.dirname(require.resolve('swiper')), '..');
+    var browserVendorLib = new Funnel(swiperPath, {
       destDir: 'swiper',
       include: ['js/swiper.min.js', 'css/swiper.min.css']
     });
@@ -22,7 +23,13 @@ module.exports = {
       return `if (typeof FastBoot === 'undefined') { ${content} }`
     });
 
-    return defaultTree ? new mergeTrees([defaultTree, browserVendorLib]) : browserVendorLib;
+    if (defaultTree !== undefined) {
+      trees.push(defaultTree);
+    }
+
+    trees.push(browserVendorLib);
+
+    return new mergeTrees(trees);
   },
 
   included: function(app) {
